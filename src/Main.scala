@@ -5,24 +5,33 @@ object Main {
   def main(args: Array[String]): Unit = {
     val m = init_game(10, 10, 10)
     val game = new MineSweeper(m, 10)
-    game.display()
     while (!game.end) {
+      game.display()
       println("Entrez les coordonnées de la case à découvrir (i j):")
-      val i = scala.io.StdIn.readInt()
       val j = scala.io.StdIn.readInt()
+      val i = scala.io.StdIn.readInt()
 
       game.interact(i, j)
-      game.display()
     }
+    println("-------------")
+    println("Fin de partie")
+    println("-------------")
+    game.reveal()
+    game.display()
+    println()
 
-    println("Fin de partie !")
+    if (game.nb_valid_case == 0) {
+      println("Bravo, vous avez gagné !")
+    } else {
+      println("Vous avez perdu !")
+    }
   }
 
   def get_dimension(m: Array[Array[Case]]): (Int, Int) = {
     (m.length, m(0).length)
   }
 
-  def is_inside(m: Array[Array[Case]], i: Int, j: Int): Boolean = {
+  private def is_inside(m: Array[Array[Case]], i: Int, j: Int): Boolean = {
     val (n, p) = get_dimension(m)
     i >= 0 && i < n && j >= 0 && j < p
   }
@@ -32,12 +41,12 @@ object Main {
     neighbors.filter { case (x, y) => is_inside(m, x, y) }
   }
 
-  def random_coords(m: Array[Array[Case]]): (Int, Int) = {
+  private def random_coords(m: Array[Array[Case]]): (Int, Int) = {
     val (n, p) = get_dimension(m)
     (Random.nextInt(n), Random.nextInt(p))
   }
 
-  def incr_tab(m: Array[Array[Case]], i: Int, j: Int): Array[Array[Case]] = {
+  private def incr_tab(m: Array[Array[Case]], i: Int, j: Int): Array[Array[Case]] = {
     if (m(i)(j).value != -1) {
       m(i)(j).value += 1
     }
@@ -45,7 +54,7 @@ object Main {
   }
 
   @tailrec
-  def random_mine(m: Array[Array[Case]]): Array[Array[Case]] = {
+  private def random_mine(m: Array[Array[Case]]): Array[Array[Case]] = {
     val (i, j) = random_coords(m)
     if (m(i)(j).value == -1) {
       random_mine(m)
@@ -56,7 +65,7 @@ object Main {
     }
   }
 
-  def init_case(k: Int): Case = {
+  private def init_case(k: Int): Case = {
     if (k == -1) {
       new Mine
     } else {
@@ -65,7 +74,7 @@ object Main {
   }
 
 
-  def init_game(w: Int, h: Int, n: Int): Array[Array[Case]] = {
+   private def init_game(w: Int, h: Int, n: Int): Array[Array[Case]] = {
     val m = Array.ofDim[Case](w, h)
     for (i <- 0 until w) {
       for (j <- 0 until h) {
