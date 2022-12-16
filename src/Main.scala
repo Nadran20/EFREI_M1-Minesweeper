@@ -74,7 +74,7 @@ object Main {
   }
 
 
-   private def init_game(w: Int, h: Int, n: Int): Array[Array[Case]] = {
+  private def init_game(w: Int, h: Int, n: Int): Array[Array[Case]] = {
     val m = Array.ofDim[Case](w, h)
     for (i <- 0 until w) {
       for (j <- 0 until h) {
