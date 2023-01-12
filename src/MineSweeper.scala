@@ -1,3 +1,5 @@
+import Main.get_neighbors
+
 class MineSweeper {
   var m: Array[Array[Case]] = Array[Array[Case]]()
   private var screen: Array[Array[String]] = Array[Array[String]]()
@@ -20,6 +22,7 @@ class MineSweeper {
       print("| " + i + " ")
     }
     println("|")
+    println("---------------------------------------------")
 
     for (i <- 0 until Main.get_dimension(m)._1) {
       print("| " + i + " ")
@@ -38,19 +41,16 @@ class MineSweeper {
   def interact(i: Int, j: Int): Unit = {
     if (screen(i)(j) == null) {
       m(i)(j).value match {
-        case -1 => {
+        case -1 =>
           screen(i)(j) = " \uD83D\uDCA3"
           end = true
-        }
-        case 0 => {
+        case 0 =>
           screen(i)(j) = "   "
           nb_valid_case -= 1
-          Main.get_neighbors(m, i, j).foreach { case (i, j) => interact(i, j) }
-        }
-        case _ => {
+          get_neighbors(m, i, j).foreach { case (i, j) => interact(i, j) }
+        case _ =>
           screen(i)(j) = " " + m(i)(j).value.toString + " "
           nb_valid_case -= 1
-        }
       }
     }
     if (nb_valid_case == 0) {
