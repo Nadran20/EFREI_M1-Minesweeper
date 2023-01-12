@@ -11,7 +11,12 @@ object Main {
       val j = scala.io.StdIn.readInt()
       val i = scala.io.StdIn.readInt()
 
-      game.interact(i, j)
+      if(!is_inside(m,i,j)) {
+        println("Coordonnées invalides")
+      } else {
+        game.interact(i, j)
+      }
+
     }
     println("-------------")
     println("Fin de partie")
